@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {FC, useEffect, useState} from 'react'
+import {CardType} from './@types/types'
+import {API} from './api/api'
+import {Card} from './components/Card'
+import {Preloader} from './components/common/Preloader'
+import {CardWrapper, Title, Wrapper} from './styles/App.style'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export const App: FC = () => {
+    const [items, setItems] = useState<CardType[]>([])
+    const [images, setImages] = useState([])
+
+    const loadData = () => {
+        API.getItems().then(res => setItems(res))
+        API.getImages().then(res => setImages(res))
+    }
+    useEffect(() => {
+        loadData()
+    }, [])
+
+    if (items.length === 0 || images.length === 0) return <Preloader/>
+    return <Wrapper>
+        <Title>Похожие объявления</Title>
+        <CardWrapper>
+            <Card items={items} images={images}/>
+        </CardWrapper>
+    </Wrapper>
 }
 
-export default App;
+export default App
