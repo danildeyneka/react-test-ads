@@ -55,13 +55,13 @@ export const Inner = styled.div`
   color: #2C2C2C;
 
   p {
-    margin: 0;
+    margin: 0; // that's why !important added
   }
 
   svg {
     position: absolute;
-    top: -2px;
-    right: 33px;
+    top: 0;
+    right: 32px;
 
     :hover path {
       fill: #00A0AB;
@@ -78,6 +78,8 @@ export const OldPrice = styled.p`
   font-weight: 400;
   font-size: 14px;
   text-decoration: line-through;
+  margin-top: -1px !important;
+  margin-bottom: 1px !important;
 `
 
 export const Price = styled.p`
@@ -88,7 +90,7 @@ export const Price = styled.p`
 export const Title = styled.p`
   font-weight: 500;
   font-size: 14px;
-  margin-top: 8px !important;
+  margin-top: 7.25px !important;
 `
 
 export const Footer = styled.div`
@@ -97,7 +99,7 @@ export const Footer = styled.div`
   font-size: 12px;
   display: flex;
   justify-content: space-between;
-  margin-top: 8px;
+  margin-top: 13px;
 `
 
 

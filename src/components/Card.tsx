@@ -8,8 +8,10 @@ type PropsType = {
 }
 
 export const Card: FC<PropsType> = (props) => {
+    console.log('cards rendered')
     const dataParser = (date: number) => {
-        const tempDate = new Date(date).toLocaleDateString('en-US').replace(/\//g, '.')
+        let tempDate = new Date(date).toLocaleDateString('en-US').replace(/\//g, '.')
+        if (tempDate.charAt(1) === '.') tempDate = `0${tempDate}`
         const tempTime = new Date(date).toLocaleTimeString('en-US')
         const time = tempTime.substring(0, tempTime.length - 6).replace(':', '.')
         return `${tempDate}, ${time}`
@@ -62,7 +64,7 @@ export const Card: FC<PropsType> = (props) => {
             <Price>{i.price} ₽</Price>
             <Title>{i.title}</Title>
             <Footer>
-                <p>{i.locality}</p>
+                <p>{i.locality.slice(0, 15)}</p>
                 <p>{dataParser(i.date)}</p>
             </Footer>
         </Inner>
