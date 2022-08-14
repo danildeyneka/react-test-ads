@@ -9,13 +9,13 @@ export const CardItem = styled.div<{ seen?: boolean }>`
   margin-bottom: 24px;
   background-color: ${props => props.seen ? '#FFF6A5' : '#FFFFFF'};
   position: relative;
+`
 
-  img {
-    width: 224px;
-    height: 260px;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-  }
+export const Img = styled.img`
+  width: 224px;
+  height: 260px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 `
 
 export const HeaderWrapper = styled.div`
@@ -101,5 +101,3 @@ export const Footer = styled.div`
   justify-content: space-between;
   margin-top: 13px;
 `
-
-

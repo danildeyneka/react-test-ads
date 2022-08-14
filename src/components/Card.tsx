@@ -1,6 +1,6 @@
 import {FC} from 'react'
 import {CardType, ImageType} from '../@types/types'
-import {CardItem, Footer, HeaderWrapper, Inner, OldPrice, Price, Title} from '../styles/Card.style'
+import {CardItem, Footer, HeaderWrapper, Inner, OldPrice, Price, Title, Img} from '../styles/Card.style'
 
 type PropsType = {
     items: CardType[]
@@ -8,18 +8,19 @@ type PropsType = {
 }
 
 export const Card: FC<PropsType> = (props) => {
-    console.log('cards rendered')
-    const dataParser = (date: number) => {
+
+    const dateParser = (date: number) => {
         let tempDate = new Date(date).toLocaleDateString('en-US').replace(/\//g, '.')
-        if (tempDate.charAt(1) === '.') tempDate = `0${tempDate}`
+        if (tempDate.charAt(1) === '.')
+            tempDate = `0${tempDate}`
+        tempDate = tempDate.substring(0, 6) + tempDate.substring(8) // cutting year to 2 last digits
         const tempTime = new Date(date).toLocaleTimeString('en-US')
         const time = tempTime.substring(0, tempTime.length - 6).replace(':', '.')
         return `${tempDate}, ${time}`
     }
     const mappedItems = props.items.map(i => <CardItem key={i.id} seen={i.seen}>
         <HeaderWrapper>
-            {/*<img src={props.images[+i.id - 1].download_url} alt="img"/>*/}
-            <img src="https://source.unsplash.com/random" alt="img"/>
+            <Img src={props.images[+i.id - 1].download_url} alt="img"/>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M9.5 2.73684V21.2632L9.5 21.2669C9.49997 21.3799 9.49981 21.9023 9.73278 22.4119C9.85392 22.6768 10.0453 22.9547 10.346 23.1653C10.6505 23.3786 11.0346 23.5 11.5 23.5C11.9654 23.5 12.3495 23.3786 12.654 23.1653C12.9547 22.9547 13.1461 22.6768 13.2672 22.4119C13.5002 21.9023 13.5 21.3799 13.5 21.2669L13.5 21.2632V2.73684C13.5 2.38076 13.4113 1.84835 13.1246 1.38729C12.8213 0.899478 12.2959 0.5 11.5 0.5C10.7041 0.5 10.1787 0.899478 9.87539 1.38729C9.5887 1.84835 9.5 2.38076 9.5 2.73684Z"
@@ -55,9 +56,9 @@ export const Card: FC<PropsType> = (props) => {
                     fill="#C7C7C7"/>
             </svg>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fillRule="evenodd" clipRule="evenodd"
-                      d="M5 5L12 2L19 5V12.5C18 20 12 21 12 21C12 21 6 20 5 12.5V5ZM13.1325 9.07651L12.439 7.80489C12.2495 7.45742 11.7505 7.45742 11.561 7.80489L10.8675 9.07651C10.7956 9.20838 10.6682 9.30092 10.5206 9.32857L9.09692 9.59518C8.7079 9.66803 8.55372 10.1425 8.82562 10.4301L9.8207 11.4826C9.92389 11.5918 9.97255 11.7415 9.95322 11.8905L9.76683 13.3269C9.7159 13.7194 10.1195 14.0126 10.4771 13.8429L11.7856 13.2218C11.9213 13.1574 12.0787 13.1574 12.2144 13.2218L13.5229 13.8429C13.8805 14.0126 14.2841 13.7194 14.2332 13.3269L14.0468 11.8905C14.0275 11.7415 14.0761 11.5918 14.1793 11.4826L15.1744 10.4301C15.4463 10.1425 15.2921 9.66803 14.9031 9.59518L13.4794 9.32857C13.3318 9.30092 13.2044 9.20838 13.1325 9.07651Z"
-                      fill="#C4C4C4"/>
+                <path
+                    d="M5 5L12 2L19 5V12.5C18 20 12 21 12 21C12 21 6 20 5 12.5V5ZM13.1325 9.07651L12.439 7.80489C12.2495 7.45742 11.7505 7.45742 11.561 7.80489L10.8675 9.07651C10.7956 9.20838 10.6682 9.30092 10.5206 9.32857L9.09692 9.59518C8.7079 9.66803 8.55372 10.1425 8.82562 10.4301L9.8207 11.4826C9.92389 11.5918 9.97255 11.7415 9.95322 11.8905L9.76683 13.3269C9.7159 13.7194 10.1195 14.0126 10.4771 13.8429L11.7856 13.2218C11.9213 13.1574 12.0787 13.1574 12.2144 13.2218L13.5229 13.8429C13.8805 14.0126 14.2841 13.7194 14.2332 13.3269L14.0468 11.8905C14.0275 11.7415 14.0761 11.5918 14.1793 11.4826L15.1744 10.4301C15.4463 10.1425 15.2921 9.66803 14.9031 9.59518L13.4794 9.32857C13.3318 9.30092 13.2044 9.20838 13.1325 9.07651Z"
+                    fill="#C4C4C4"/>
             </svg>
 
             <OldPrice>{i.oldPrice} ₽</OldPrice>
@@ -65,7 +66,7 @@ export const Card: FC<PropsType> = (props) => {
             <Title>{i.title}</Title>
             <Footer>
                 <p>{i.locality.slice(0, 15)}</p>
-                <p>{dataParser(i.date)}</p>
+                <p>{dateParser(i.date)}</p>
             </Footer>
         </Inner>
     </CardItem>)

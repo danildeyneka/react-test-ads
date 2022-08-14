@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react'
-import {CardType} from './@types/types'
+import {CardType, ImageType} from './@types/types'
 import {API} from './api/api'
 import {Card} from './components/Card'
 import {Preloader} from './components/common/Preloader'
@@ -7,11 +7,12 @@ import {CardWrapper, Title, Wrapper, Footer} from './styles/App.style'
 
 export const App: FC = React.memo(() => {
     const [items, setItems] = useState<CardType[]>([])
-    const [images, setImages] = useState([])
+    const [images, setImages] = useState<ImageType[]>([])
     const [itemsShowed, setItemsShowed] = useState<CardType[]>([])
     const [itemsCounter, setItemsCounter] = useState<number>(10)
     const [fetching, setFetching] = useState<boolean>(false)
     const [footerText, setFooterText] = useState<'Показать еще' | 'Показаны все карточки'>('Показать еще')
+    // const [loading, setLoading] = useState<boolean>(false) // deprecated
 
     const scrollHandler = (e: any) => {
         if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 35) {
@@ -29,21 +30,22 @@ export const App: FC = React.memo(() => {
 
     useEffect(() => {
         loadData()
-    }, [])
-
-    useEffect(() => {
         window.addEventListener('scroll', scrollHandler)
         return () => window.removeEventListener('scroll', scrollHandler)
     }, [])
 
     useEffect(() => {
         if (fetching) {
-            if (itemsCounter >= items.length) setFooterText('Показаны все карточки')
-        setItemsShowed(items.slice(0, itemsCounter))
-        setItemsCounter(prevState => prevState + 10)
-        setFetching(false)
+            if (itemsCounter - 10 >= items.length) setFooterText('Показаны все карточки')
+            else {
+                // setLoading(true) // deprecated due to mapping an existing array instead of api response
+                setItemsShowed(items.slice(0, itemsCounter))
+                setItemsCounter(prevState => prevState + 10)
+                setFetching(false)
+                // setLoading(false)
+            }
         }
-    }, [fetching, footerText])
+    }, [fetching])
 
     if (itemsShowed.length === 0 || images.length === 0) return <Preloader/>
 
@@ -51,6 +53,7 @@ export const App: FC = React.memo(() => {
         <Title>Похожие объявления</Title>
         <CardWrapper>
             <Card items={itemsShowed} images={images}/>
+            {/*{loading && <Preloader/>} // deprecated */}
         </CardWrapper>
         <Footer>
             {footerText}
