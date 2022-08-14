@@ -12,7 +12,7 @@ export const App: FC = React.memo(() => {
     const [itemsCounter, setItemsCounter] = useState<number>(10)
     const [fetching, setFetching] = useState<boolean>(false)
     const [footerText, setFooterText] = useState<'Показать еще' | 'Показаны все карточки'>('Показать еще')
-    // const [loading, setLoading] = useState<boolean>(false) // deprecated
+    const [loading, setLoading] = useState<boolean>(false)
 
     const scrollHandler = (e: any) => {
         if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 35) {
@@ -36,13 +36,15 @@ export const App: FC = React.memo(() => {
 
     useEffect(() => {
         if (fetching) {
-            if (itemsCounter - 10 >= items.length) setFooterText('Показаны все карточки')
+            if (itemsCounter - 10 >= items.length) {
+                setFooterText('Показаны все карточки')
+                setLoading(false)
+            }
             else {
-                // setLoading(true) // deprecated due to mapping an existing array instead of api response
+                setLoading(true)
                 setItemsShowed(items.slice(0, itemsCounter))
                 setItemsCounter(prevState => prevState + 10)
                 setFetching(false)
-                // setLoading(false)
             }
         }
     }, [fetching])
@@ -53,7 +55,7 @@ export const App: FC = React.memo(() => {
         <Title>Похожие объявления</Title>
         <CardWrapper>
             <Card items={itemsShowed} images={images}/>
-            {/*{loading && <Preloader/>} // deprecated */}
+            {loading && <Preloader/>}
         </CardWrapper>
         <Footer>
             {footerText}
